@@ -1,0 +1,44 @@
+<div class="page-width section">
+  <div class="section-header section-header--center scroll-trigger">
+    {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+    <h2 class="section-header__title">{{ section.settings.heading }}</h2>
+    {%- if section.settings.subtext != blank -%}<p class="section-header__subtext">{{ section.settings.subtext }}</p>{%- endif -%}
+  </div>
+  <div class="video-showcase scroll-trigger">
+    {%- if section.settings.video != blank -%}
+      <video {% if section.settings.autoplay %}autoplay muted loop{% else %}controls{% endif %} playsinline poster="{% if section.settings.cover %}{{ section.settings.cover | image_url: width: 1600 }}{% endif %}">
+        <source src="{{ section.settings.video.sources[1].url | default: section.settings.video.sources[0].url }}" type="video/mp4">
+      </video>
+      {%- unless section.settings.autoplay -%}
+        <button class="video-showcase__play" type="button" data-video-play aria-label="Play"><span>{% render 'icon', name: 'play' %}</span></button>
+      {%- endunless -%}
+    {%- elsif section.settings.youtube_url != blank -%}
+      {%- assign yt_id = section.settings.youtube_url | split: 'v=' | last | split: '&' | first | split: '/' | last -%}
+      {%- if section.settings.cover != blank -%}
+        <img src="{{ section.settings.cover | image_url: width: 1600 }}" alt="{{ section.settings.heading | escape }}" width="1600" height="900" loading="lazy">
+      {%- else -%}
+        <img src="https://img.youtube.com/vi/{{ yt_id }}/maxresdefault.jpg" alt="{{ section.settings.heading | escape }}" width="1600" height="900" loading="lazy">
+      {%- endif -%}
+      <button class="video-showcase__play" type="button" data-video-play data-video-src="https://www.youtube.com/embed/{{ yt_id }}" aria-label="Play"><span>{% render 'icon', name: 'play' %}</span></button>
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag }}
+      <div class="video-showcase__play"><span>{% render 'icon', name: 'play' %}</span></div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video showcase",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Watch" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Engineered to be experienced" },
+    { "type": "text", "id": "subtext", "label": "Subtext", "default": "Take a closer look at the technology inside every Aether device." },
+    { "type": "video", "id": "video", "label": "Video upload" },
+    { "type": "text", "id": "youtube_url", "label": "YouTube URL (if no upload)" },
+    { "type": "image_picker", "id": "cover", "label": "Cover image" },
+    { "type": "checkbox", "id": "autoplay", "label": "Autoplay (muted)", "default": false }
+  ],
+  "presets": [{ "name": "Video showcase" }]
+}
+{% endschema %}

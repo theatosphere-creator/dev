@@ -1,0 +1,71 @@
+<div class="{% if section.settings.full_width %}{% else %}page-width {% endif %}section" {% if section.settings.bg %}style="background:{{ section.settings.bg }};{% if section.settings.text_color %}color:{{ section.settings.text_color }};{% endif %}padding-block:5rem;"{% endif %}>
+  <div class="{% if section.settings.full_width %}page-width{% endif %}">
+    <div class="section-header section-header--center scroll-trigger">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2 class="section-header__title">{{ section.settings.heading }}</h2>
+      {%- if section.settings.subtext != blank -%}<p class="section-header__subtext">{{ section.settings.subtext }}</p>{%- endif -%}
+    </div>
+    <div class="values-grid">
+      {%- for block in section.blocks -%}
+        <div class="value-card scroll-trigger" {{ block.shopify_attributes }} {% if section.settings.bg %}style="border-color:rgba(255,255,255,0.15);"{% endif %}>
+          {%- if block.settings.image != blank -%}
+            <img src="{{ block.settings.image | image_url: width: 600 }}" alt="{{ block.settings.title | escape }}" width="300" height="200" loading="lazy" style="border-radius:var(--button-radius);margin-bottom:1.6rem;">
+          {%- else -%}
+            <div class="value-card__icon">{% render 'icon', name: block.settings.icon %}</div>
+          {%- endif -%}
+          <h3 style="font-size:2rem;">{{ block.settings.title }}</h3>
+          <p style="margin:0;{% if section.settings.bg %}color:rgba(255,255,255,0.75);{% else %}color:var(--color-text-muted);{% endif %}">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Feature columns",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Why Aether" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Key features" },
+    { "type": "text", "id": "subtext", "label": "Subtext" },
+    { "type": "checkbox", "id": "full_width", "label": "Full width background", "default": false },
+    { "type": "color", "id": "bg", "label": "Background color" },
+    { "type": "color", "id": "text_color", "label": "Text color" }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image (optional)" },
+        {
+          "type": "select", "id": "icon", "label": "Icon",
+          "options": [
+            { "value": "headphones", "label": "Headphones" },
+            { "value": "speaker", "label": "Speaker" },
+            { "value": "watch", "label": "Watch" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "refresh", "label": "Refresh" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "award", "label": "Award" },
+            { "value": "globe", "label": "Globe" },
+            { "value": "check", "label": "Check" }
+          ], "default": "headphones"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Adaptive ANC" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Intelligent noise cancellation that adapts to your environment in real time." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature columns",
+      "blocks": [
+        { "type": "feature", "settings": { "icon": "headphones", "title": "Studio-grade sound" } },
+        { "type": "feature", "settings": { "icon": "refresh", "title": "40h battery" } },
+        { "type": "feature", "settings": { "icon": "shield", "title": "Waterproof" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

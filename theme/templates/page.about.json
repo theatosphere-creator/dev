@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "hero": {
+      "type": "about-hero",
+      "settings": {
+        "eyebrow": "Our story",
+        "heading": "Engineering the future of sound",
+        "text": "Aether was founded on a single belief: that premium audio should be accessible, beautiful and built to last.",
+        "height": "medium"
+      }
+    },
+    "mission": {
+      "type": "rich-text",
+      "settings": {
+        "eyebrow": "Our mission",
+        "heading": "Sound without compromise",
+        "text": "<p>We design every product to deliver studio-grade audio, all-day comfort and a design language that feels effortlessly premium. From the materials we source to the algorithms we tune, nothing ships until it's perfect.</p>",
+        "width": 760,
+        "align": "center"
+      }
+    },
+    "values": {
+      "type": "product-features",
+      "blocks": {
+        "v1": { "type": "feature", "settings": { "icon": "award", "title": "Craftsmanship", "text": "Obsessive attention to every detail, inside and out." } },
+        "v2": { "type": "feature", "settings": { "icon": "leaf", "title": "Sustainability", "text": "Recycled materials and carbon-neutral shipping." } },
+        "v3": { "type": "feature", "settings": { "icon": "globe", "title": "Accessibility", "text": "Premium sound at a price that makes sense." } }
+      },
+      "block_order": ["v1", "v2", "v3"],
+      "settings": { "eyebrow": "What we stand for", "heading": "Our values" }
+    },
+    "timeline": {
+      "type": "timeline",
+      "blocks": {
+        "m1": { "type": "milestone", "settings": { "year": "2020", "title": "The beginning", "text": "Two engineers set out to build the perfect pair of earbuds." } },
+        "m2": { "type": "milestone", "settings": { "year": "2022", "title": "First flagship launch", "text": "Our debut earbuds sell out in 48 hours." } },
+        "m3": { "type": "milestone", "settings": { "year": "2024", "title": "Going global", "text": "Now shipping to over 40 countries worldwide." } }
+      },
+      "block_order": ["m1", "m2", "m3"],
+      "settings": { "eyebrow": "Our journey", "heading": "Milestones" }
+    },
+    "stats": {
+      "type": "stats",
+      "blocks": {
+        "s1": { "type": "stat", "settings": { "number": "1M+", "label": "Products sold" } },
+        "s2": { "type": "stat", "settings": { "number": "40+", "label": "Countries" } },
+        "s3": { "type": "stat", "settings": { "number": "4.8\u2605", "label": "Average rating" } },
+        "s4": { "type": "stat", "settings": { "number": "25", "label": "Design awards" } }
+      },
+      "block_order": ["s1", "s2", "s3", "s4"],
+      "settings": { "heading": "Achievements", "full_width": false }
+    },
+    "team": {
+      "type": "team",
+      "blocks": {
+        "t1": { "type": "member", "settings": { "name": "Alex Rivera", "role": "Founder & CEO" } },
+        "t2": { "type": "member", "settings": { "name": "Mia Chen", "role": "Head of Design" } },
+        "t3": { "type": "member", "settings": { "name": "Sam Okafor", "role": "Lead Audio Engineer" } },
+        "t4": { "type": "member", "settings": { "name": "Lena Park", "role": "Head of Product" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"],
+      "settings": { "eyebrow": "The people", "heading": "Meet the team" }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": { "heading": "Be part of the journey", "subtext": "Get the latest from Aether straight to your inbox." }
+    }
+  },
+  "order": ["hero", "mission", "values", "timeline", "stats", "team", "newsletter"]
+}

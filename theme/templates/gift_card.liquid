@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ shop.name }} — Gift card</title>
+  {{ content_for_header }}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  <style>
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; background:var(--color-secondary,#111); padding:2.4rem; }
+    .gift-card { background:#fff; border-radius:16px; padding:3.2rem; max-width:44rem; width:100%; text-align:center; }
+    .gift-card__value { font-size:4rem; font-weight:800; color:var(--color-accent,#FF4D00); }
+    .gift-card__code { font-family:monospace; font-size:1.8rem; letter-spacing:0.1em; background:#f4f4f4; padding:1.2rem; border-radius:8px; margin:1.6rem 0; }
+  </style>
+</head>
+<body>
+  <div class="gift-card">
+    <h1>{{ shop.name }}</h1>
+    <p class="text-muted">Gift card</p>
+    <div class="gift-card__value">{{ gift_card.balance | money }}</div>
+    <div class="gift-card__code">{{ gift_card.code | format_code }}</div>
+    <a href="{{ shop.url }}" class="button button--accent button--full">Shop now</a>
+  </div>
+</body>
+</html>

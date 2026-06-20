@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main": { "type": "main-contact" },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": { "type": "qa", "settings": { "question": "How can I track my order?", "answer": "<p>You'll receive a tracking link by email as soon as your order ships.</p>" } },
+        "q2": { "type": "qa", "settings": { "question": "What payment methods do you accept?", "answer": "<p>We accept all major cards, Shop Pay, PayPal, Google Pay and cash on delivery.</p>" } },
+        "q3": { "type": "qa", "settings": { "question": "Do you ship internationally?", "answer": "<p>Yes, we ship to over 40 countries worldwide.</p>" } }
+      },
+      "block_order": ["q1", "q2", "q3"],
+      "settings": { "eyebrow": "Support", "heading": "Common questions" }
+    }
+  },
+  "order": ["main", "faq"]
+}

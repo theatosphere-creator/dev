@@ -1,0 +1,23 @@
+{%- comment -%} Rendered via AJAX for predictive search results {%- endcomment -%}
+<div data-predictive-results class="predictive-results">
+  {%- if predictive_search.performed -%}
+    {%- if predictive_search.resources.products.size > 0 -%}
+      {%- for product in predictive_search.resources.products -%}
+        <a href="{{ product.url }}" class="predictive-result">
+          {%- if product.featured_media -%}
+            <img src="{{ product.featured_media | image_url: width: 100 }}" alt="{{ product.title | escape }}" width="50" height="50" loading="lazy">
+          {%- endif -%}
+          <span>
+            <span style="display:block;font-weight:600;">{{ product.title }}</span>
+            <span class="text-muted">{{ product.price | money }}</span>
+          </span>
+        </a>
+      {%- endfor -%}
+    {%- else -%}
+      <p class="text-muted">{{ 'general.search.no_results' | t: terms: predictive_search.terms }}</p>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+{% schema %}
+{ "name": "Predictive search" }
+{% endschema %}

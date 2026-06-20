@@ -1,0 +1,23 @@
+{%- comment -%}
+  Renders a star rating. Reads product review metafields when available,
+  otherwise falls back to a passed-in value.
+  Usage: {% render 'rating', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign rating_value = rating | default: 0
+  assign rating_count = count | default: 0
+  if product and product.metafields.reviews.rating.value != blank
+    assign rating_value = product.metafields.reviews.rating.value.rating
+    assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+  endif
+  if rating_value == 0
+    assign rating_value = 4.8
+  endif
+  assign pct = rating_value | times: 20 | round
+-%}
+<span class="rating" role="img" aria-label="{{ rating_value }} out of 5 stars">
+  <span class="rating__stars" style="--pct: {{ pct }}%"></span>
+  {%- if rating_count and rating_count != 0 -%}
+    <span class="rating__count">({{ rating_count }})</span>
+  {%- endif -%}
+</span>

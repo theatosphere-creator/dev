@@ -1,0 +1,31 @@
+{%- if settings.enable_breadcrumbs -%}
+  <nav class="breadcrumbs page-width" aria-label="Breadcrumb">
+    <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t }}</a>
+    {%- case request.page_type -%}
+      {%- when 'product' -%}
+        {%- if collection.url -%}
+          <span class="breadcrumbs__sep">/</span>
+          <a href="{{ collection.url }}">{{ collection.title }}</a>
+        {%- endif -%}
+        <span class="breadcrumbs__sep">/</span>
+        <span aria-current="page">{{ product.title }}</span>
+      {%- when 'collection' -%}
+        <span class="breadcrumbs__sep">/</span>
+        <span aria-current="page">{{ collection.title }}</span>
+      {%- when 'article' -%}
+        <span class="breadcrumbs__sep">/</span>
+        <a href="{{ blog.url }}">{{ blog.title }}</a>
+        <span class="breadcrumbs__sep">/</span>
+        <span aria-current="page">{{ article.title }}</span>
+      {%- when 'blog' -%}
+        <span class="breadcrumbs__sep">/</span>
+        <span aria-current="page">{{ blog.title }}</span>
+      {%- when 'page' -%}
+        <span class="breadcrumbs__sep">/</span>
+        <span aria-current="page">{{ page.title }}</span>
+      {%- else -%}
+        <span class="breadcrumbs__sep">/</span>
+        <span aria-current="page">{{ page_title }}</span>
+    {%- endcase -%}
+  </nav>
+{%- endif -%}

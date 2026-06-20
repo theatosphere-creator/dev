@@ -1,0 +1,32 @@
+<div class="page-width section">
+  <div class="scroll-trigger" style="max-width:{{ section.settings.width }}px;margin:0 auto;text-align:{{ section.settings.align }};">
+    {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+    {%- if section.settings.heading != blank -%}<h2>{{ section.settings.heading }}</h2>{%- endif -%}
+    {%- if section.settings.text != blank -%}<div class="rte">{{ section.settings.text }}</div>{%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <div style="margin-top:2rem;"><a href="{{ section.settings.button_link }}" class="button button--accent">{{ section.settings.button_label }}</a></div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Built different" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We obsess over every detail so you can lose yourself in the experience.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "range", "id": "width", "label": "Max width", "min": 400, "max": 1000, "step": 20, "unit": "px", "default": 720 },
+    {
+      "type": "select", "id": "align", "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ], "default": "center"
+    }
+  ],
+  "presets": [{ "name": "Rich text" }]
+}
+{% endschema %}

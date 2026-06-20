@@ -1,0 +1,51 @@
+{
+  "current": {
+    "color_primary": "#000000",
+    "color_secondary": "#111111",
+    "color_accent": "#FF4D00",
+    "color_accent_text": "#FFFFFF",
+    "color_background": "#FFFFFF",
+    "color_text": "#1A1A1A",
+    "color_text_muted": "#6B6B6B",
+    "color_border": "#E5E5E5",
+    "color_button": "#000000",
+    "color_button_text": "#FFFFFF",
+    "font_heading": "assistant_n7",
+    "font_heading_scale": 120,
+    "font_body": "assistant_n4",
+    "font_body_scale": 100,
+    "page_width": 1440,
+    "spacing_sections": 64,
+    "grid_gap": 20,
+    "card_corner_radius": 14,
+    "button_corner_radius": 8,
+    "card_image_ratio": "square",
+    "card_show_vendor": true,
+    "card_show_rating": true,
+    "card_quick_add": true,
+    "card_hover_second_image": true,
+    "cart_type": "drawer",
+    "cart_show_note": true,
+    "cart_show_coupon": true,
+    "cart_show_shipping_calc": true,
+    "enable_dynamic_checkout": true,
+    "show_trust_badges": true,
+    "enable_breadcrumbs": true,
+    "enable_lazy_loading": true,
+    "enable_animations": true
+  },
+  "presets": {
+    "Aether Electronics": {
+      "color_primary": "#000000",
+      "color_secondary": "#111111",
+      "color_accent": "#FF4D00",
+      "color_accent_text": "#FFFFFF",
+      "color_background": "#FFFFFF",
+      "color_text": "#1A1A1A",
+      "color_text_muted": "#6B6B6B",
+      "color_border": "#E5E5E5",
+      "color_button": "#000000",
+      "color_button_text": "#FFFFFF"
+    }
+  }
+}

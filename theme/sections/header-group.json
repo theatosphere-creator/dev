@@ -1,0 +1,27 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "a1": { "type": "announcement", "settings": { "text": "Free shipping on all orders", "icon": "truck" } },
+        "a2": { "type": "announcement", "settings": { "text": "Cash on delivery available", "icon": "shield" } },
+        "a3": { "type": "announcement", "settings": { "text": "2-year warranty on every device", "icon": "award" } }
+      },
+      "block_order": ["a1", "a2", "a3"],
+      "settings": {}
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "enable_search": true,
+        "enable_account": true,
+        "enable_wishlist": true,
+        "sticky": true
+      }
+    }
+  },
+  "order": ["announcement-bar", "header"]
+}

@@ -1,0 +1,85 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": { "type": "vendor" },
+        "title": { "type": "title" },
+        "rating": { "type": "rating" },
+        "price": { "type": "price" },
+        "variant_picker": { "type": "variant_picker" },
+        "buy_buttons": { "type": "buy_buttons" },
+        "highlights": { "type": "highlights" },
+        "description": { "type": "description" },
+        "trust": { "type": "trust" },
+        "specs": {
+          "type": "specifications",
+          "settings": {
+            "heading": "Specifications",
+            "specs": "Driver: 11mm dynamic\nBattery: 40 hours\nBluetooth: 5.3\nWeight: 4.5g per bud\nCharging: USB-C / Wireless\nWater resistance: IPX7"
+          }
+        },
+        "warranty": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Warranty",
+            "content": "<p>Every Aether device is backed by a 2-year limited warranty covering manufacturing defects.</p>"
+          }
+        },
+        "shipping": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Shipping information",
+            "content": "<p>Free standard shipping on all orders. Express options available at checkout. Orders ship within 24 hours.</p>"
+          }
+        },
+        "share": { "type": "share" }
+      },
+      "block_order": [
+        "vendor", "title", "rating", "price", "variant_picker", "buy_buttons",
+        "highlights", "description", "trust", "specs", "warranty", "shipping", "share"
+      ]
+    },
+    "features": {
+      "type": "product-features",
+      "blocks": {
+        "f1": { "type": "feature", "settings": { "icon": "headphones", "title": "Studio-grade sound", "text": "Custom-tuned drivers deliver rich bass and crystal-clear highs." } },
+        "f2": { "type": "feature", "settings": { "icon": "refresh", "title": "All-day battery", "text": "Up to 40 hours of playback with the charging case." } },
+        "f3": { "type": "feature", "settings": { "icon": "shield", "title": "Built to last", "text": "IPX7 water and sweat resistance for any environment." } }
+      },
+      "block_order": ["f1", "f2", "f3"],
+      "settings": { "eyebrow": "Why you'll love it", "heading": "Key features & benefits" }
+    },
+    "comparison": {
+      "type": "comparison",
+      "blocks": {
+        "c1": { "type": "column", "settings": { "name": "This model", "featured": true } },
+        "c2": { "type": "column", "settings": { "name": "Standard" } },
+        "c3": { "type": "column", "settings": { "name": "Entry" } }
+      },
+      "block_order": ["c1", "c2", "c3"],
+      "settings": { "eyebrow": "Compare", "heading": "How it compares" }
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "blocks": {
+        "r1": { "type": "review" },
+        "r2": { "type": "review", "settings": { "title": "Worth it", "body": "Comfortable and the battery is amazing.", "author": "Sam K." } },
+        "r3": { "type": "review", "settings": { "title": "Premium feel", "body": "Looks and feels like a luxury product.", "author": "Lena P." } }
+      },
+      "block_order": ["r1", "r2", "r3"]
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": { "type": "qa" },
+        "q2": { "type": "qa", "settings": { "question": "Are these compatible with my phone?", "answer": "<p>Yes, Aether devices work with all Bluetooth-enabled iOS and Android devices.</p>" } }
+      },
+      "block_order": ["q1", "q2"],
+      "settings": { "heading": "Product FAQ" }
+    },
+    "related": { "type": "related-products" },
+    "recently_viewed": { "type": "recently-viewed" }
+  },
+  "order": ["main", "features", "comparison", "reviews", "faq", "related", "recently_viewed"]
+}

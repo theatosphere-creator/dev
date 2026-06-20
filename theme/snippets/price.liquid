@@ -1,0 +1,26 @@
+{%- comment -%}
+  Renders product price with compare-at and sale handling.
+  Usage: {% render 'price', product: product %} or {% render 'price', variant: variant %}
+{%- endcomment -%}
+{%- liquid
+  if variant
+    assign price = variant.price
+    assign compare = variant.compare_at_price
+  else
+    assign target = product
+    assign price = target.price
+    assign compare = target.compare_at_price
+    assign price_min = target.price_min
+    assign price_varies = target.price_varies
+  endif
+-%}
+<span class="card-product__price" data-product-price>
+  {%- if compare > price -%}
+    <ins>{{ price | money }}</ins>
+    <del>{{ compare | money }}</del>
+  {%- elsif price_varies -%}
+    {{ 'products.product.from_price_html' | t: price: price_min | money }}
+  {%- else -%}
+    {{ price | money }}
+  {%- endif -%}
+</span>

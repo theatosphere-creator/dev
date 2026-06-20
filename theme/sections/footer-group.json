@@ -1,0 +1,48 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Join the Aether community",
+        "subtext": "Subscribe for early access to drops, exclusive offers and audio tips."
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": { "heading": "Shop", "menu": "footer" }
+        },
+        "support": {
+          "type": "links",
+          "settings": {
+            "heading": "Support",
+            "link_1_text": "Contact us", "link_1_url": "/pages/contact",
+            "link_2_text": "Shipping", "link_2_url": "/pages/shipping",
+            "link_3_text": "Returns", "link_3_url": "/pages/returns",
+            "link_4_text": "Warranty", "link_4_url": "/pages/warranty"
+          }
+        },
+        "company": {
+          "type": "links",
+          "settings": {
+            "heading": "Company",
+            "link_1_text": "About us", "link_1_url": "/pages/about",
+            "link_2_text": "Blog", "link_2_url": "/blogs/news",
+            "link_3_text": "Careers", "link_3_url": "/pages/careers",
+            "link_4_text": "Press", "link_4_url": "/pages/press"
+          }
+        }
+      },
+      "block_order": ["shop", "support", "company"],
+      "settings": {
+        "show_social": true,
+        "show_payment_icons": true
+      }
+    }
+  },
+  "order": ["newsletter", "footer"]
+}

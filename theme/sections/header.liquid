@@ -1,0 +1,113 @@
+{%- liquid
+  assign menu = section.settings.menu
+-%}
+<div class="header-wrapper">
+  <header class="header" data-header{% if section.settings.sticky %} data-sticky{% endif %}>
+    <div class="page-width">
+      <div class="header__inner">
+        <button type="button" class="header__icon header__menu-toggle" data-open="MenuDrawer" aria-label="{{ 'general.accessibility.menu' | t }}">
+          {% render 'icon', name: 'menu' %}
+        </button>
+
+        <a href="{{ routes.root_url }}" class="header__logo">
+          {%- if section.settings.logo != blank -%}
+            <img src="{{ section.settings.logo | image_url: width: 400 }}" alt="{{ shop.name }}" width="200" height="60" style="max-width:{{ section.settings.logo_width }}px;">
+          {%- else -%}
+            {{ shop.name }}
+          {%- endif -%}
+        </a>
+
+        <nav class="header__nav" aria-label="Primary">
+          {%- for link in linklists[menu].links -%}
+            <div class="header__nav-item">
+              <a href="{{ link.url }}" class="header__nav-link">
+                {{ link.title }}
+                {%- if link.links.size > 0 -%}{% render 'icon', name: 'chevron-down', size: 16 %}{%- endif -%}
+              </a>
+              {%- if link.links.size > 0 -%}
+                <div class="mega-menu">
+                  {%- for childlink in link.links -%}
+                    <div class="mega-menu__col">
+                      <a href="{{ childlink.url }}" class="mega-menu__col-title">{{ childlink.title }}</a>
+                      {%- for grandchild in childlink.links -%}
+                        <a href="{{ grandchild.url }}" class="mega-menu__link">{{ grandchild.title }}</a>
+                      {%- endfor -%}
+                    </div>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </nav>
+
+        <div class="header__actions">
+          {%- if section.settings.enable_search -%}
+            <button type="button" class="header__icon" data-open="SearchModal" aria-label="{{ 'general.search.search' | t }}">
+              {% render 'icon', name: 'search' %}
+            </button>
+          {%- endif -%}
+          {%- if section.settings.enable_account -%}
+            <a href="{{ routes.account_url }}" class="header__icon" aria-label="{{ 'customer.account_fallback' | t }}">
+              {% render 'icon', name: 'user' %}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.enable_wishlist -%}
+            <a href="{{ routes.search_url }}" class="header__icon" aria-label="Wishlist" data-wishlist-link>
+              {% render 'icon', name: 'heart' %}
+              <span class="header__count" data-wishlist-count hidden>0</span>
+            </a>
+          {%- endif -%}
+          <button type="button" class="header__icon" onclick="openCartDrawer()" aria-label="{{ 'cart.general.title' | t }}">
+            {% render 'icon', name: 'cart' %}
+            <span class="header__count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+
+{%- comment -%} Mobile menu drawer {%- endcomment -%}
+<div class="drawer-overlay" data-close></div>
+<nav class="menu-drawer" id="MenuDrawer" data-drawer aria-label="Mobile">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+    <span class="header__logo">{{ shop.name }}</span>
+    <button type="button" class="header__icon" data-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'icon', name: 'close' %}</button>
+  </div>
+  {%- for link in linklists[menu].links -%}
+    <a href="{{ link.url }}" class="menu-drawer__link">{{ link.title }}</a>
+    {%- for childlink in link.links -%}
+      <a href="{{ childlink.url }}" class="menu-drawer__link" style="padding-left:1.6rem;font-size:1.5rem;color:var(--color-text-muted);">{{ childlink.title }}</a>
+    {%- endfor -%}
+  {%- endfor -%}
+  <a href="{{ routes.account_url }}" class="menu-drawer__link">{{ 'customer.account_fallback' | t }}</a>
+</nav>
+
+{%- comment -%} Search modal {%- endcomment -%}
+<div class="search-modal" id="SearchModal" data-drawer>
+  <div class="search-modal__panel">
+    <predictive-search>
+      <form action="{{ routes.search_url }}" method="get" class="search-modal__form" role="search">
+        <input type="search" name="q" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.search' | t }}" autocomplete="off">
+        <button type="submit" class="button button--accent">{% render 'icon', name: 'search' %}</button>
+        <button type="button" class="header__icon" data-close aria-label="{{ 'general.accessibility.close' | t }}">{% render 'icon', name: 'close' %}</button>
+      </form>
+      <div data-predictive-results class="predictive-results"></div>
+    </predictive-search>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo image" },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 80, "max": 300, "step": 10, "unit": "px", "default": 160 },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu" },
+    { "type": "checkbox", "id": "enable_search", "label": "Enable search", "default": true },
+    { "type": "checkbox", "id": "enable_account", "label": "Enable account", "default": true },
+    { "type": "checkbox", "id": "enable_wishlist", "label": "Enable wishlist", "default": true },
+    { "type": "checkbox", "id": "sticky", "label": "Sticky header", "default": true }
+  ]
+}
+{% endschema %}

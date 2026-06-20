@@ -1,0 +1,7 @@
+{%- comment -%} Used to refresh cart drawer contents via AJAX (?section_id=cart-drawer) {%- endcomment -%}
+<div data-cart-drawer-inner>
+  {% render 'cart-drawer-items' %}
+</div>
+{% schema %}
+{ "name": "Cart drawer" }
+{% endschema %}
