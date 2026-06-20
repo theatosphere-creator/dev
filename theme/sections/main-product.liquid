@@ -110,7 +110,7 @@
 
           {%- when 'buy_buttons' -%}
             <div {{ block.shopify_attributes }}>
-              <form data-product-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+              {%- form 'product', product, data-product-form: 'true', novalidate: 'novalidate' -%}
                 <input type="hidden" name="id" value="{{ current_variant.id }}">
                 <div class="product__quantity-row">
                   <span class="variant-option__label" style="margin:0;">{{ 'products.product.quantity' | t }}</span>
@@ -131,7 +131,7 @@
                     {{ form | payment_button }}
                   {%- endif -%}
                 </div>
-              </form>
+              {%- endform -%}
             </div>
 
           {%- when 'highlights' -%}

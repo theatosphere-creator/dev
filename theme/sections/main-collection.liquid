@@ -1,7 +1,4 @@
-{%- liquid
-  assign sort_by = collection.sort_by | default: collection.default_sort_by
-  paginate collection.products by section.settings.products_per_page
--%}
+{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
 
 {%- comment -%} Banner {%- endcomment -%}
 <div class="collection-banner">
@@ -19,6 +16,7 @@
 
 {% render 'breadcrumbs' %}
 
+{%- paginate collection.products by section.settings.products_per_page -%}
 <div class="page-width section-sm" data-infinite-scroll>
   <div class="collection-layout">
     {%- comment -%} Sidebar facets {%- endcomment -%}
@@ -78,6 +76,7 @@
     </div>
   </div>
 </div>
+{%- endpaginate -%}
 
 {% schema %}
 {

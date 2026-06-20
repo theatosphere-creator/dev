@@ -2,7 +2,10 @@
   assign coll = section.settings.collection
   assign products = coll.products
   assign limit = section.settings.products_to_show
-  assign is_slider = section.settings.layout == 'slider'
+  assign is_slider = false
+  if section.settings.layout == 'slider'
+    assign is_slider = true
+  endif
 -%}
 <div class="page-width section">
   <slider-controls>
