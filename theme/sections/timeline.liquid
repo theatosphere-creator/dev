@@ -1,0 +1,46 @@
+<div class="page-width section">
+  <div class="section-header section-header--center scroll-trigger">
+    {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+    <h2 class="section-header__title">{{ section.settings.heading }}</h2>
+  </div>
+  <div class="timeline scroll-trigger" style="max-width:72rem;margin:0 auto;">
+    {%- for block in section.blocks -%}
+      <div class="timeline__item" {{ block.shopify_attributes }}>
+        <div class="timeline__year">{{ block.settings.year }}</div>
+        <h3 style="margin:0.4rem 0;">{{ block.settings.title }}</h3>
+        <p class="text-muted" style="margin:0;">{{ block.settings.text }}</p>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Timeline",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our journey" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Milestones" }
+  ],
+  "blocks": [
+    {
+      "type": "milestone",
+      "name": "Milestone",
+      "settings": [
+        { "type": "text", "id": "year", "label": "Year", "default": "2020" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Aether is born" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Two engineers set out to build the perfect pair of earbuds." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Timeline",
+      "blocks": [
+        { "type": "milestone", "settings": { "year": "2020", "title": "The beginning" } },
+        { "type": "milestone", "settings": { "year": "2022", "title": "First flagship launch", "text": "Our debut earbuds sell out in 48 hours." } },
+        { "type": "milestone", "settings": { "year": "2024", "title": "Going global", "text": "Now shipping to over 40 countries worldwide." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

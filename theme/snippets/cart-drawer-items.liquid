@@ -1,0 +1,67 @@
+{%- comment -%} Inner content of the cart drawer, refreshed via AJAX {%- endcomment -%}
+{%- if cart.item_count > 0 -%}
+  <div class="cart-drawer__body">
+    {%- for item in cart.items -%}
+      <div class="cart-item" data-cart-item>
+        <a href="{{ item.url }}" class="cart-item__image">
+          {%- if item.image -%}
+            <img src="{{ item.image | image_url: width: 160 }}" alt="{{ item.image.alt | escape }}" width="80" height="80" loading="lazy">
+          {%- endif -%}
+        </a>
+        <div class="cart-item__details">
+          <a href="{{ item.url }}" class="cart-item__title">{{ item.product.title }}</a>
+          {%- unless item.product.has_only_default_variant -%}
+            <div class="cart-item__variant">{{ item.variant.title }}</div>
+          {%- endunless -%}
+          <div class="cart-item__price">{{ item.final_price | money }}</div>
+          <div class="quantity" style="margin-top:0.8rem">
+            <button class="quantity__button" type="button" data-quantity-change="decrease" aria-label="Decrease">&minus;</button>
+            <input class="quantity__input" type="number" min="0" value="{{ item.quantity }}" data-cart-quantity="{{ forloop.index }}" aria-label="Quantity">
+            <button class="quantity__button" type="button" data-quantity-change="increase" aria-label="Increase">+</button>
+          </div>
+        </div>
+        <div class="cart-item__meta">
+          <div class="cart-item__price">{{ item.final_line_price | money }}</div>
+          <button type="button" class="cart-item__remove" data-cart-remove="{{ forloop.index }}">{{ 'cart.general.remove' | t }}</button>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <div class="cart-drawer__footer">
+    {%- if settings.cart_show_note -%}
+      <textarea name="note" class="cart-note" placeholder="{{ 'cart.general.note' | t }}" form="cart-drawer-form">{{ cart.note }}</textarea>
+    {%- endif -%}
+
+    {%- if settings.cart_show_coupon -%}
+      <p class="text-muted" style="font-size:1.2rem; margin:0 0 1rem;">{% render 'icon', name: 'check' %} {{ 'cart.general.coupon_hint' | t }}</p>
+    {%- endif -%}
+
+    <div class="cart-drawer__totals">
+      <span>{{ 'cart.general.subtotal' | t }}</span>
+      <span>{{ cart.total_price | money }}</span>
+    </div>
+    <p class="text-muted" style="font-size:1.2rem; text-align:center; margin-bottom:1.2rem;">{{ 'cart.general.taxes_and_shipping_at_checkout' | t }}</p>
+
+    <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form">
+      <button type="submit" name="checkout" class="button button--accent button--full">{{ 'cart.general.checkout' | t }}</button>
+    </form>
+    <a href="{{ routes.cart_url }}" class="button button--secondary button--full" style="margin-top:0.8rem;">{{ 'cart.general.view_cart' | t }}</a>
+
+    {%- if settings.show_trust_badges -%}
+      <div class="trust-badges">
+        <span class="trust-badges__item">{% render 'icon', name: 'lock' %} Secure checkout</span>
+        <span class="trust-badges__item">{% render 'icon', name: 'truck' %} Fast shipping</span>
+        <span class="trust-badges__item">{% render 'icon', name: 'refresh' %} Easy returns</span>
+      </div>
+    {%- endif -%}
+  </div>
+{%- else -%}
+  <div class="cart-drawer__body">
+    <div class="cart-drawer__empty">
+      {% render 'icon', name: 'cart', size: 48 %}
+      <p>{{ 'cart.general.empty' | t }}</p>
+      <button type="button" class="button button--accent" data-close>{{ 'cart.general.continue_shopping' | t }}</button>
+    </div>
+  </div>
+{%- endif -%}

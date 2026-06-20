@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    {%- if settings.color_accent -%}
+      <meta name="theme-color" content="{{ settings.color_primary }}">
+    {%- endif -%}
+
+    {%- if page_title -%}
+      <title>
+        {{ page_title }}
+        {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+        {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+        {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+      </title>
+    {%- else -%}
+      <title>{{ shop.name }}</title>
+    {%- endif -%}
+
+    {% if page_description %}
+      <meta name="description" content="{{ page_description | escape }}">
+    {% endif %}
+
+    {% render 'meta-tags' %}
+
+    {{ content_for_header }}
+
+    {%- liquid
+      assign body_font = settings.font_body
+      assign heading_font = settings.font_heading
+      assign body_font_bold = body_font | font_modify: 'weight', 'bold'
+      assign heading_font_bold = heading_font | font_modify: 'weight', 'bold'
+    -%}
+
+    {% style %}
+      {{ body_font | font_face: font_display: 'swap' }}
+      {{ body_font_bold | font_face: font_display: 'swap' }}
+      {{ heading_font | font_face: font_display: 'swap' }}
+      {{ heading_font_bold | font_face: font_display: 'swap' }}
+
+      :root {
+        --color-primary: {{ settings.color_primary }};
+        --color-secondary: {{ settings.color_secondary }};
+        --color-accent: {{ settings.color_accent }};
+        --color-accent-text: {{ settings.color_accent_text }};
+        --color-background: {{ settings.color_background }};
+        --color-text: {{ settings.color_text }};
+        --color-text-muted: {{ settings.color_text_muted }};
+        --color-border: {{ settings.color_border }};
+        --color-button: {{ settings.color_button }};
+        --color-button-text: {{ settings.color_button_text }};
+
+        --font-body-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+        --font-body-weight: {{ body_font.weight }};
+        --font-heading-family: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+        --font-heading-weight: {{ heading_font.weight }};
+
+        --font-body-scale: {{ settings.font_body_scale | divided_by: 100.0 }};
+        --font-heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
+
+        --page-width: {{ settings.page_width }}px;
+        --spacing-sections: {{ settings.spacing_sections }}px;
+        --grid-gap: {{ settings.grid_gap }}px;
+        --card-radius: {{ settings.card_corner_radius }}px;
+        --button-radius: {{ settings.button_corner_radius }}px;
+      }
+    {% endstyle %}
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+    <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+  </head>
+
+  <body class="template-{{ request.page_type | handle }}"{% if request.page_type == 'product' %} data-product-handle="{{ product.handle }}"{% endif %}>
+    <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+      {{ 'general.accessibility.skip_to_content' | t }}
+    </a>
+
+    {% sections 'header-group' %}
+
+    <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+
+    <ul hidden>
+      <li id="a11y-refresh-page-message">{{ 'general.accessibility.loading' | t }}</li>
+    </ul>
+
+    <script>
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}'
+      };
+      window.cartStrings = {
+        error: 'There was an error while updating your cart. Please try again.',
+        quantityError: 'You can only add {{ quantity }} of this item to your cart.'
+      };
+    </script>
+
+    {% render 'cart-drawer' %}
+  </body>
+</html>

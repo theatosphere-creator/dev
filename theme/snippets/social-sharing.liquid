@@ -1,0 +1,10 @@
+{%- liquid
+  assign share_url = shop.url | append: share_link
+  assign share_title = share_title | default: shop.name | url_encode
+-%}
+<div class="article__share">
+  <span class="uppercase" style="font-size:1.3rem;font-weight:700;">{{ 'blogs.article.share' | t }}</span>
+  <a class="header__icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.share_on_facebook' | t }}" href="https://www.facebook.com/sharer.php?u={{ share_url }}">{% render 'icon', name: 'facebook' %}</a>
+  <a class="header__icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.share_on_twitter' | t }}" href="https://twitter.com/intent/tweet?text={{ share_title }}&url={{ share_url }}">{% render 'icon', name: 'twitter' %}</a>
+  <a class="header__icon" target="_blank" rel="noopener" aria-label="{{ 'general.social.share_on_pinterest' | t }}" href="https://pinterest.com/pin/create/button/?url={{ share_url }}&description={{ share_title }}">{% render 'icon', name: 'globe' %}</a>
+</div>

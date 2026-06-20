@@ -1,0 +1,106 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "New Collection",
+        "heading": "Sound. Redefined.",
+        "text": "Experience studio-grade audio engineered for the modern listener. Precision drivers. Adaptive noise cancellation. All-day comfort.",
+        "button_label": "Shop now",
+        "button_label_2": "Explore",
+        "text_align": "left",
+        "height": "large",
+        "show_overlay": true
+      }
+    },
+    "categories": {
+      "type": "featured-categories",
+      "blocks": {
+        "c1": { "type": "category", "settings": { "title": "Earbuds" } },
+        "c2": { "type": "category", "settings": { "title": "Headphones" } },
+        "c3": { "type": "category", "settings": { "title": "Speakers" } },
+        "c4": { "type": "category", "settings": { "title": "Smart Watches" } },
+        "c5": { "type": "category", "settings": { "title": "Accessories" } }
+      },
+      "block_order": ["c1", "c2", "c3", "c4", "c5"],
+      "settings": { "eyebrow": "Browse", "heading": "Shop by category", "subtext": "Find your perfect sound across our curated collections." }
+    },
+    "bestsellers": {
+      "type": "featured-collection",
+      "settings": { "eyebrow": "Bestsellers", "heading": "Best sellers", "layout": "slider", "products_to_show": 8 }
+    },
+    "lifestyle": {
+      "type": "lifestyle",
+      "blocks": {
+        "f1": { "type": "feature", "settings": { "icon": "shield", "title": "IPX7 water resistant" } },
+        "f2": { "type": "feature", "settings": { "icon": "refresh", "title": "40h battery life" } },
+        "f3": { "type": "feature", "settings": { "icon": "headphones", "title": "Adaptive ANC" } }
+      },
+      "block_order": ["f1", "f2", "f3"],
+      "settings": { "eyebrow": "Lifestyle", "heading": "Built for every moment", "dark": true, "full_width": true }
+    },
+    "newarrivals": {
+      "type": "featured-collection",
+      "settings": { "eyebrow": "Just dropped", "heading": "New arrivals", "layout": "slider", "products_to_show": 8 }
+    },
+    "promo": {
+      "type": "promo-grid",
+      "blocks": {
+        "p1": { "type": "promo", "settings": { "heading": "Noise-cancelling headphones", "subheading": "New", "text": "Silence the world.", "button_label": "Shop headphones" } },
+        "p2": { "type": "promo", "settings": { "heading": "Wireless earbuds bundle", "subheading": "Save 25%", "text": "Pair and save.", "button_label": "Shop bundles" } }
+      },
+      "block_order": ["p1", "p2"],
+      "settings": { "eyebrow": "Offers", "heading": "Featured deals" }
+    },
+    "comparison": {
+      "type": "comparison",
+      "blocks": {
+        "col1": { "type": "column", "settings": { "name": "Aether Pro", "featured": true } },
+        "col2": { "type": "column", "settings": { "name": "Aether Plus" } },
+        "col3": { "type": "column", "settings": { "name": "Aether Lite" } }
+      },
+      "block_order": ["col1", "col2", "col3"],
+      "settings": { "eyebrow": "Compare", "heading": "Find your perfect match", "subtext": "Compare features across our flagship lineup." }
+    },
+    "video": {
+      "type": "video-showcase",
+      "settings": { "eyebrow": "Watch", "heading": "Engineered to be experienced", "subtext": "Take a closer look at the technology inside every Aether device." }
+    },
+    "trending": {
+      "type": "featured-collection",
+      "settings": { "eyebrow": "Hot right now", "heading": "Trending now", "layout": "grid", "products_to_show": 8 }
+    },
+    "reviews": {
+      "type": "reviews",
+      "blocks": {
+        "r1": { "type": "review", "settings": { "quote": "The sound quality is unreal. Best earbuds I've ever owned, hands down.", "author": "Alex M.", "role": "Verified buyer" } },
+        "r2": { "type": "review", "settings": { "quote": "Battery lasts forever and the noise cancelling is incredible on flights.", "author": "Priya S.", "role": "Verified buyer" } },
+        "r3": { "type": "review", "settings": { "quote": "Premium build, premium sound. Worth every penny.", "author": "Daniel R.", "role": "Verified buyer" } }
+      },
+      "block_order": ["r1", "r2", "r3"],
+      "settings": { "eyebrow": "Loved by thousands", "heading": "What our customers say" }
+    },
+    "instagram": {
+      "type": "instagram-feed",
+      "blocks": {
+        "i1": { "type": "post" }, "i2": { "type": "post" }, "i3": { "type": "post" },
+        "i4": { "type": "post" }, "i5": { "type": "post" }, "i6": { "type": "post" }
+      },
+      "block_order": ["i1", "i2", "i3", "i4", "i5", "i6"],
+      "settings": { "eyebrow": "Follow us", "heading": "#AetherSound", "handle": "@aether" }
+    }
+  },
+  "order": [
+    "hero",
+    "categories",
+    "bestsellers",
+    "lifestyle",
+    "newarrivals",
+    "promo",
+    "comparison",
+    "video",
+    "trending",
+    "reviews",
+    "instagram"
+  ]
+}

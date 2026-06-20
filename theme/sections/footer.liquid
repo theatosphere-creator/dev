@@ -1,0 +1,89 @@
+<footer class="footer">
+  <div class="page-width">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <div class="footer__brand-name">{{ section.settings.brand_name | default: shop.name }}</div>
+        <p style="max-width:36ch;margin-top:1.2rem;">{{ section.settings.tagline }}</p>
+        {%- if section.settings.show_social -%}
+          <div class="footer__social">
+            {%- if settings.social_instagram != blank -%}<a href="{{ settings.social_instagram }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon', name: 'instagram' %}</a>{%- endif -%}
+            {%- if settings.social_facebook != blank -%}<a href="{{ settings.social_facebook }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon', name: 'facebook' %}</a>{%- endif -%}
+            {%- if settings.social_twitter != blank -%}<a href="{{ settings.social_twitter }}" target="_blank" rel="noopener" aria-label="X">{% render 'icon', name: 'twitter' %}</a>{%- endif -%}
+            {%- if settings.social_youtube != blank -%}<a href="{{ settings.social_youtube }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon', name: 'youtube' %}</a>{%- endif -%}
+            {%- if settings.social_tiktok != blank -%}<a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener" aria-label="TikTok">{% render 'icon', name: 'tiktok' %}</a>{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        <div class="footer__col" {{ block.shopify_attributes }}>
+          <h3 class="footer__heading">{{ block.settings.heading }}</h3>
+          {%- if block.type == 'menu' -%}
+            {%- for link in linklists[block.settings.menu].links -%}
+              <a href="{{ link.url }}" class="footer__link">{{ link.title }}</a>
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              {%- assign text_key = 'link_' | append: i | append: '_text' -%}
+              {%- assign url_key = 'link_' | append: i | append: '_url' -%}
+              {%- assign text = block.settings[text_key] -%}
+              {%- assign url = block.settings[url_key] -%}
+              {%- if text != blank -%}
+                <a href="{{ url | default: '#' }}" class="footer__link">{{ text }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <div class="footer__bottom">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</span>
+      {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+        <div style="display:flex;gap:0.8rem;align-items:center;">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      <span>Designed with precision by Aether</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "brand_name", "label": "Brand name", "default": "AETHER" },
+    { "type": "textarea", "id": "tagline", "label": "Tagline", "default": "Premium electronics engineered for those who demand more. Sound, precision, design." },
+    { "type": "checkbox", "id": "show_social", "label": "Show social icons", "default": true },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show payment icons", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shop" },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "links",
+      "name": "Links column",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Support" },
+        { "type": "text", "id": "link_1_text", "label": "Link 1 text" },
+        { "type": "url", "id": "link_1_url", "label": "Link 1 URL" },
+        { "type": "text", "id": "link_2_text", "label": "Link 2 text" },
+        { "type": "url", "id": "link_2_url", "label": "Link 2 URL" },
+        { "type": "text", "id": "link_3_text", "label": "Link 3 text" },
+        { "type": "url", "id": "link_3_url", "label": "Link 3 URL" },
+        { "type": "text", "id": "link_4_text", "label": "Link 4 text" },
+        { "type": "url", "id": "link_4_url", "label": "Link 4 URL" }
+      ]
+    }
+  ]
+}
+{% endschema %}

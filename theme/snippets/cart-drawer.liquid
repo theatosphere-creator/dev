@@ -1,0 +1,13 @@
+{%- comment -%} Cart drawer shell. Inner content updated via section 'cart-drawer'. {%- endcomment -%}
+<div class="drawer-overlay" id="CartDrawerOverlay" data-close></div>
+<cart-drawer class="cart-drawer" data-drawer aria-label="Cart">
+  <div class="cart-drawer__header">
+    <h2 class="cart-drawer__title">{{ 'cart.general.title' | t }} <span data-cart-count>{{ cart.item_count }}</span></h2>
+    <button type="button" class="header__icon" data-close aria-label="{{ 'general.accessibility.close' | t }}">
+      {% render 'icon', name: 'close' %}
+    </button>
+  </div>
+  <div data-cart-drawer-inner>
+    {% render 'cart-drawer-items' %}
+  </div>
+</cart-drawer>

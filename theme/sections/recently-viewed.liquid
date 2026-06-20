@@ -1,0 +1,49 @@
+<div class="page-width section" data-recently-viewed{% if product %} data-exclude="{{ product.handle }}"{% endif %} hidden>
+  <slider-controls>
+    <div class="slider-header scroll-trigger">
+      <h2 style="margin:0;">{{ section.settings.heading }}</h2>
+      <div class="slider-controls">
+        <button class="slider-button" type="button" data-slider-prev aria-label="{{ 'general.accessibility.previous' | t }}">{% render 'icon', name: 'chevron-left' %}</button>
+        <button class="slider-button" type="button" data-slider-next aria-label="{{ 'general.accessibility.next' | t }}">{% render 'icon', name: 'chevron-right' %}</button>
+      </div>
+    </div>
+    <div class="slider slider--products" data-slider data-recently-viewed-grid></div>
+  </slider-controls>
+</div>
+
+<script>
+(function () {
+  const root = document.currentScript.previousElementSibling;
+  const grid = root.querySelector('[data-recently-viewed-grid]');
+  const exclude = root.getAttribute('data-exclude');
+  let handles = JSON.parse(localStorage.getItem('aether_recently_viewed') || '[]');
+  if (exclude) handles = handles.filter((h) => h !== exclude);
+  handles = handles.slice(0, {{ section.settings.products_to_show }});
+  if (!handles.length) return;
+
+  Promise.all(handles.map((h) =>
+    fetch('/products/' + h + '.js').then((r) => (r.ok ? r.json() : null)).catch(() => null)
+  )).then((products) => {
+    const valid = products.filter(Boolean);
+    if (!valid.length) return;
+    grid.innerHTML = valid.map((p) => {
+      const img = p.featured_image ? p.featured_image : (p.images[0] || '');
+      const price = '$' + (p.price / 100).toFixed(2);
+      const compare = p.compare_at_price && p.compare_at_price > p.price ? '<del>$' + (p.compare_at_price / 100).toFixed(2) + '</del>' : '';
+      return '<div class="card-product"><a href="' + p.url + '" class="card-product__media"><img class="card-product__image" loading="lazy" src="' + (img ? img + '&width=600' : '') + '" alt="' + p.title.replace(/"/g, '') + '" width="600" height="600"></a><div class="card-product__info"><a href="' + p.url + '" class="card-product__title">' + p.title + '</a><span class="card-product__price"><ins>' + price + '</ins> ' + compare + '</span></div></div>';
+    }).join('');
+    root.hidden = false;
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Recently viewed",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Recently viewed" },
+    { "type": "range", "id": "products_to_show", "label": "Products to show", "min": 4, "max": 10, "step": 1, "default": 6 }
+  ],
+  "presets": [{ "name": "Recently viewed" }]
+}
+{% endschema %}

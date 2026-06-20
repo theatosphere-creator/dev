@@ -1,0 +1,61 @@
+<div class="page-width section">
+  {%- if section.settings.heading != blank -%}
+    <div class="section-header scroll-trigger">
+      {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+      <h2 class="section-header__title">{{ section.settings.heading }}</h2>
+    </div>
+  {%- endif -%}
+  <div class="promo-grid{% if section.blocks.size == 3 %} promo-grid--3{% endif %}">
+    {%- for block in section.blocks -%}
+      <a href="{{ block.settings.link | default: '#' }}" class="promo-card scroll-trigger{% if block.settings.tall %} promo-card--tall{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <img src="{{ block.settings.image | image_url: width: 1000 }}" alt="{{ block.settings.heading | escape }}" width="600" height="400" loading="lazy">
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag }}
+        {%- endif -%}
+        <div class="promo-card__overlay"></div>
+        <div class="promo-card__content">
+          {%- if block.settings.subheading != blank -%}<span class="eyebrow" style="color:#fff;">{{ block.settings.subheading }}</span>{%- endif -%}
+          <h3 style="color:#fff;margin:0 0 0.4rem;">{{ block.settings.heading }}</h3>
+          {%- if block.settings.text != blank -%}<p style="color:rgba(255,255,255,0.85);margin:0 0 1.2rem;">{{ block.settings.text }}</p>{%- endif -%}
+          {%- if block.settings.button_label != blank -%}<span class="link" style="color:#fff;">{{ block.settings.button_label }} {% render 'icon', name: 'arrow-right', size: 16 %}</span>{%- endif -%}
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Promotional grid",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Featured offers" }
+  ],
+  "blocks": [
+    {
+      "type": "promo",
+      "name": "Promo card",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "subheading", "label": "Subheading", "default": "Limited time" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Up to 30% off" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Premium audio for less." },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the sale" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "checkbox", "id": "tall", "label": "Tall card", "default": false }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Promotional grid",
+      "blocks": [
+        { "type": "promo", "settings": { "heading": "Noise-cancelling headphones", "subheading": "New" } },
+        { "type": "promo", "settings": { "heading": "Wireless earbuds bundle", "subheading": "Save 25%" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

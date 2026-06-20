@@ -1,0 +1,62 @@
+<div class="page-width section" id="reviews">
+  <div class="section-header scroll-trigger">
+    {%- if section.settings.eyebrow != blank -%}<span class="eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+    <h2 class="section-header__title">{{ section.settings.heading }}</h2>
+  </div>
+
+  {%- comment -%} Review app integration point (Shopify Product Reviews / Judge.me / Loox etc.) {%- endcomment -%}
+  <div class="spr" id="shopify-product-reviews" data-id="{{ product.id }}">{{ product.metafields.spr.reviews }}</div>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="scroll-trigger" style="display:flex;align-items:center;gap:2.4rem;flex-wrap:wrap;margin-bottom:3.2rem;padding:2.4rem;border:1px solid var(--color-border);border-radius:var(--card-radius);">
+      <div style="text-align:center;">
+        <div style="font-size:5rem;font-weight:800;line-height:1;font-family:var(--font-heading-family);">{{ section.settings.average_rating }}</div>
+        {% render 'rating', rating: section.settings.average_rating %}
+        <div class="text-muted" style="font-size:1.3rem;">Based on {{ section.settings.review_count }} reviews</div>
+      </div>
+      <div style="flex:1;min-width:200px;color:var(--color-text-muted);">{{ section.settings.summary_text }}</div>
+    </div>
+
+    <div class="values-grid">
+      {%- for block in section.blocks -%}
+        <div class="value-card scroll-trigger" {{ block.shopify_attributes }}>
+          {% render 'rating', rating: block.settings.rating %}
+          <h3 style="font-size:1.8rem;margin:1rem 0 0.4rem;">{{ block.settings.title }}</h3>
+          <p style="color:var(--color-text-muted);">{{ block.settings.body }}</p>
+          <div style="font-weight:700;font-size:1.4rem;">{{ block.settings.author }} <span class="comparison__check" style="font-weight:400;">{% render 'icon', name: 'check', size: 14 %} Verified</span></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Product reviews",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Reviews" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Customer reviews" },
+    { "type": "text", "id": "average_rating", "label": "Average rating", "default": "4.8" },
+    { "type": "text", "id": "review_count", "label": "Review count", "default": "1,284" },
+    { "type": "textarea", "id": "summary_text", "label": "Summary text", "default": "Customers love the sound quality, battery life and premium build. Install a review app (Judge.me, Loox, Shopify Product Reviews) to display verified reviews automatically." }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Sample review",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Rating", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Title", "default": "Incredible sound" },
+        { "type": "textarea", "id": "body", "label": "Body", "default": "Best purchase I've made this year. The ANC is next level." },
+        { "type": "text", "id": "author", "label": "Author", "default": "Jordan T." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product reviews",
+      "blocks": [ { "type": "review" }, { "type": "review" }, { "type": "review" } ]
+    }
+  ]
+}
+{% endschema %}

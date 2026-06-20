@@ -1,0 +1,240 @@
+{%- liquid
+  assign product = product
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+{% render 'breadcrumbs' %}
+
+<div class="page-width section-sm" id="ProductInfo">
+  <div class="product">
+    {%- comment -%} ===== Gallery ===== {%- endcomment -%}
+    <div class="product__media-wrapper">
+      <product-gallery>
+        <div class="product__media-main is-zoomable" data-media-main>
+          {%- for media in product.media -%}
+            <div class="product__media-item{% if media.id == current_variant.featured_media.id %} is-active{% elsif forloop.first and current_variant.featured_media == nil %} is-active{% endif %}" data-media-item="{{ media.id }}">
+              {%- case media.media_type -%}
+                {%- when 'video' -%}
+                  {{ media | video_tag: controls: true, image_size: '1200x' }}
+                {%- when 'external_video' -%}
+                  {{ media | external_video_tag }}
+                {%- when 'model' -%}
+                  {{ media | model_viewer_tag }}
+                {%- else -%}
+                  <img src="{{ media | image_url: width: 1200 }}"
+                       srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 1200 }} 1200w, {{ media | image_url: width: 1600 }} 1600w"
+                       sizes="(min-width:990px) 50vw, 100vw"
+                       alt="{{ media.alt | escape | default: product.title }}"
+                       width="1200" height="1200"
+                       {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+              {%- endcase -%}
+            </div>
+          {%- else -%}
+            <div class="product__media-item is-active" data-media-item="placeholder">{{ 'product-1' | placeholder_svg_tag }}</div>
+          {%- endfor -%}
+        </div>
+
+        {%- if product.media.size > 1 -%}
+          <div class="product__thumbs">
+            {%- for media in product.media -%}
+              <button type="button" class="product__thumb{% if media.id == current_variant.featured_media.id %} is-active{% elsif forloop.first and current_variant.featured_media == nil %} is-active{% endif %}" data-media-thumb="{{ media.id }}" aria-label="View media {{ forloop.index }}">
+                <img src="{{ media.preview_image | image_url: width: 160 }}" alt="" width="80" height="80" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </product-gallery>
+    </div>
+
+    {%- comment -%} ===== Info ===== {%- endcomment -%}
+    <div class="product__info">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'vendor' -%}
+            {%- if product.vendor != blank -%}<div class="product__vendor" {{ block.shopify_attributes }}>{{ product.vendor }}</div>{%- endif -%}
+
+          {%- when 'title' -%}
+            <h1 class="product__title" {{ block.shopify_attributes }}>{{ product.title }}</h1>
+
+          {%- when 'rating' -%}
+            <div {{ block.shopify_attributes }} style="display:flex;align-items:center;gap:1rem;">
+              {% render 'rating', product: product %}
+              <a href="#reviews" class="text-muted" style="font-size:1.3rem;">Read reviews</a>
+            </div>
+
+          {%- when 'price' -%}
+            <div class="product__price" data-product-price {{ block.shopify_attributes }}>
+              {%- if current_variant.compare_at_price > current_variant.price -%}
+                <ins style="text-decoration:none;">{{ current_variant.price | money }}</ins>
+                <del>{{ current_variant.compare_at_price | money }}</del>
+                {%- assign savings = current_variant.compare_at_price | minus: current_variant.price -%}
+                <span class="badge badge--sale">{{ 'products.product.save_html' | t: saved_amount: savings | money }}</span>
+              {%- else -%}
+                {{ current_variant.price | money }}
+              {%- endif -%}
+            </div>
+            <p class="text-muted" style="font-size:1.3rem;margin-top:-0.6rem;">Tax included. Shipping calculated at checkout.</p>
+
+          {%- when 'description' -%}
+            {%- if product.description != blank -%}
+              <div class="rte" {{ block.shopify_attributes }} style="margin:1.6rem 0;">{{ product.description }}</div>
+            {%- endif -%}
+
+          {%- when 'variant_picker' -%}
+            {%- unless product.has_only_default_variant -%}
+              <variant-selector class="variant-picker" {{ block.shopify_attributes }}>
+                <script type="application/json" data-variants-json>
+                  {{ product.variants | json }}
+                </script>
+                {%- for option in product.options_with_values -%}
+                  {%- assign is_color = false -%}
+                  {%- assign option_name_down = option.name | downcase -%}
+                  {%- if option_name_down contains 'color' or option_name_down contains 'colour' -%}{%- assign is_color = true -%}{%- endif -%}
+                  <div class="variant-option">
+                    <span class="variant-option__label">{{ option.name }}</span>
+                    <div class="variant-values">
+                      {%- for value in option.values -%}
+                        <label class="variant-value{% if is_color %} is-swatch{% endif %}">
+                          <input type="radio" name="option-{{ option.position }}" value="{{ value | escape }}"{% if option.selected_value == value %} checked{% endif %}>
+                          {%- if is_color -%}
+                            <span style="background:{{ value | downcase | split: ' ' | last }};" title="{{ value }}"></span>
+                          {%- else -%}
+                            {{ value }}
+                          {%- endif -%}
+                        </label>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </variant-selector>
+            {%- endunless -%}
+
+          {%- when 'buy_buttons' -%}
+            <div {{ block.shopify_attributes }}>
+              <form data-product-form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="{{ current_variant.id }}">
+                <div class="product__quantity-row">
+                  <span class="variant-option__label" style="margin:0;">{{ 'products.product.quantity' | t }}</span>
+                  <div class="quantity">
+                    <button class="quantity__button" type="button" data-quantity-change="decrease" aria-label="{{ 'products.product.decrease_quantity' | t }}">&minus;</button>
+                    <input class="quantity__input" type="number" name="quantity" value="1" min="1" aria-label="{{ 'products.product.quantity' | t }}">
+                    <button class="quantity__button" type="button" data-quantity-change="increase" aria-label="{{ 'products.product.increase_quantity' | t }}">+</button>
+                  </div>
+                </div>
+                <div class="product__actions">
+                  <div class="product__actions-row">
+                    <button type="submit" name="add" class="button button--full" data-add-to-cart {% unless current_variant.available %}disabled{% endunless %}>
+                      <span>{% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</span>
+                    </button>
+                    <button type="button" class="card-product__wishlist" data-wishlist-toggle="{{ product.id }}" aria-label="Add to wishlist" style="position:static;flex-shrink:0;border:1px solid var(--color-border);">{% render 'icon', name: 'heart' %}</button>
+                  </div>
+                  {%- if settings.enable_dynamic_checkout -%}
+                    {{ form | payment_button }}
+                  {%- endif -%}
+                </div>
+              </form>
+            </div>
+
+          {%- when 'highlights' -%}
+            <div class="product__highlights" {{ block.shopify_attributes }}>
+              {%- if block.settings.highlight_1 != blank -%}<div class="product__highlight">{% render 'icon', name: block.settings.icon_1 %} {{ block.settings.highlight_1 }}</div>{%- endif -%}
+              {%- if block.settings.highlight_2 != blank -%}<div class="product__highlight">{% render 'icon', name: block.settings.icon_2 %} {{ block.settings.highlight_2 }}</div>{%- endif -%}
+              {%- if block.settings.highlight_3 != blank -%}<div class="product__highlight">{% render 'icon', name: block.settings.icon_3 %} {{ block.settings.highlight_3 }}</div>{%- endif -%}
+              {%- if block.settings.highlight_4 != blank -%}<div class="product__highlight">{% render 'icon', name: block.settings.icon_4 %} {{ block.settings.highlight_4 }}</div>{%- endif -%}
+            </div>
+
+          {%- when 'trust' -%}
+            {%- if settings.show_trust_badges -%}
+              <div class="trust-badges" style="justify-content:flex-start;margin:1.6rem 0;" {{ block.shopify_attributes }}>
+                <span class="trust-badges__item">{% render 'icon', name: 'lock' %} Secure payment</span>
+                <span class="trust-badges__item">{% render 'icon', name: 'truck' %} Free shipping</span>
+                <span class="trust-badges__item">{% render 'icon', name: 'shield' %} 2-year warranty</span>
+              </div>
+            {%- endif -%}
+
+          {%- when 'collapsible' -%}
+            <details class="accordion__item" {{ block.shopify_attributes }} style="border-top:1px solid var(--color-border);">
+              <summary class="accordion__summary">{{ block.settings.heading }}</summary>
+              <div class="accordion__content rte">
+                {{ block.settings.content }}
+                {%- if block.settings.page != blank -%}{{ pages[block.settings.page].content }}{%- endif -%}
+              </div>
+            </details>
+
+          {%- when 'specifications' -%}
+            <details class="accordion__item" {{ block.shopify_attributes }} style="border-top:1px solid var(--color-border);">
+              <summary class="accordion__summary">{{ block.settings.heading | default: 'Specifications' }}</summary>
+              <div class="accordion__content">
+                <table>
+                  {%- assign specs = block.settings.specs | newline_to_br | split: '<br />' -%}
+                  {%- for spec in specs -%}
+                    {%- assign pair = spec | strip | split: ':' -%}
+                    {%- if pair[0] != blank -%}
+                      <tr><td>{{ pair[0] | strip }}</td><td>{{ pair[1] | strip }}</td></tr>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </table>
+              </div>
+            </details>
+
+          {%- when 'share' -%}
+            {% render 'social-sharing', share_link: product.url, share_title: product.title %}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Sticky mobile add to cart {%- endcomment -%}
+<div class="sticky-atc">
+  <div class="sticky-atc__info">
+    <div class="sticky-atc__title">{{ product.title }}</div>
+    <div class="sticky-atc__price" data-sticky-price>{{ current_variant.price | money }}</div>
+  </div>
+  <button type="button" class="button button--accent" onclick="document.querySelector('[data-product-form]').requestSubmit()">{{ 'products.product.add_to_cart' | t }}</button>
+</div>
+
+{% schema %}
+{
+  "name": "Product information",
+  "blocks": [
+    { "type": "vendor", "name": "Vendor", "limit": 1 },
+    { "type": "title", "name": "Title", "limit": 1 },
+    { "type": "rating", "name": "Rating", "limit": 1 },
+    { "type": "price", "name": "Price", "limit": 1 },
+    { "type": "variant_picker", "name": "Variant picker", "limit": 1 },
+    { "type": "buy_buttons", "name": "Buy buttons", "limit": 1 },
+    { "type": "description", "name": "Description", "limit": 1 },
+    {
+      "type": "highlights", "name": "Highlights", "limit": 1,
+      "settings": [
+        { "type": "select", "id": "icon_1", "label": "Icon 1", "options": [{"value":"truck","label":"Truck"},{"value":"shield","label":"Shield"},{"value":"refresh","label":"Refresh"},{"value":"headphones","label":"Headphones"},{"value":"lock","label":"Lock"},{"value":"leaf","label":"Leaf"},{"value":"check","label":"Check"}], "default": "headphones" },
+        { "type": "text", "id": "highlight_1", "label": "Highlight 1", "default": "Hi-Res audio" },
+        { "type": "select", "id": "icon_2", "label": "Icon 2", "options": [{"value":"truck","label":"Truck"},{"value":"shield","label":"Shield"},{"value":"refresh","label":"Refresh"},{"value":"headphones","label":"Headphones"},{"value":"lock","label":"Lock"},{"value":"leaf","label":"Leaf"},{"value":"check","label":"Check"}], "default": "refresh" },
+        { "type": "text", "id": "highlight_2", "label": "Highlight 2", "default": "40h battery" },
+        { "type": "select", "id": "icon_3", "label": "Icon 3", "options": [{"value":"truck","label":"Truck"},{"value":"shield","label":"Shield"},{"value":"refresh","label":"Refresh"},{"value":"headphones","label":"Headphones"},{"value":"lock","label":"Lock"},{"value":"leaf","label":"Leaf"},{"value":"check","label":"Check"}], "default": "shield" },
+        { "type": "text", "id": "highlight_3", "label": "Highlight 3", "default": "IPX7 waterproof" },
+        { "type": "select", "id": "icon_4", "label": "Icon 4", "options": [{"value":"truck","label":"Truck"},{"value":"shield","label":"Shield"},{"value":"refresh","label":"Refresh"},{"value":"headphones","label":"Headphones"},{"value":"lock","label":"Lock"},{"value":"leaf","label":"Leaf"},{"value":"check","label":"Check"}], "default": "truck" },
+        { "type": "text", "id": "highlight_4", "label": "Highlight 4", "default": "Free shipping" }
+      ]
+    },
+    { "type": "trust", "name": "Trust badges", "limit": 1 },
+    {
+      "type": "specifications", "name": "Specifications",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Specifications" },
+        { "type": "textarea", "id": "specs", "label": "Specs (one per line, key: value)", "default": "Driver: 11mm dynamic\nBattery: 40 hours\nBluetooth: 5.3\nWeight: 4.5g per bud\nCharging: USB-C / Wireless" }
+      ]
+    },
+    {
+      "type": "collapsible", "name": "Collapsible row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shipping & returns" },
+        { "type": "richtext", "id": "content", "label": "Content", "default": "<p>Free shipping on all orders. 30-day returns.</p>" },
+        { "type": "page", "id": "page", "label": "Page content (optional)" }
+      ]
+    },
+    { "type": "share", "name": "Share", "limit": 1 }
+  ],
+  "settings": []
+}
+{% endschema %}

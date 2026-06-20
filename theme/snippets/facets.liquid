@@ -1,0 +1,42 @@
+{%- comment -%} Storefront filtering UI for collections and search {%- endcomment -%}
+<form data-facet-form method="get" class="facets">
+  {%- comment -%} Preserve sort param {%- endcomment -%}
+  {%- if sort_by != blank -%}<input type="hidden" name="sort_by" value="{{ sort_by }}">{%- endif -%}
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;">
+    <strong style="font-size:1.6rem;">{{ 'collections.filters.title' | t }}</strong>
+    <a href="{{ results_url | default: collection.url }}" class="text-muted" style="font-size:1.3rem;text-decoration:underline;">{{ 'collections.filters.clear_all' | t }}</a>
+  </div>
+
+  {%- for filter in filters -%}
+    <details class="facets__group" open>
+      <summary class="facets__summary">{{ filter.label }}</summary>
+      {%- case filter.type -%}
+        {%- when 'price_range' -%}
+          <div class="facets__price-range">
+            <span>{{ 'collections.filters.from' | t }}</span>
+            <input type="number" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value }}" placeholder="0" min="0" max="{{ filter.range_max | money_without_currency | round }}" data-auto-submit>
+            <span>{{ 'collections.filters.to' | t }}</span>
+            <input type="number" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value }}" placeholder="{{ filter.range_max | money_without_currency | round }}" min="0" max="{{ filter.range_max | money_without_currency | round }}" data-auto-submit>
+          </div>
+        {%- else -%}
+          {%- assign is_color_filter = false -%}
+          {%- assign flabel = filter.label | downcase -%}
+          {%- if flabel contains 'color' or flabel contains 'colour' -%}{%- assign is_color_filter = true -%}{%- endif -%}
+          <div class="facets__list">
+            {%- for value in filter.values -%}
+              <label class="facets__item">
+                <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %} data-auto-submit>
+                {%- if is_color_filter -%}
+                  <span class="facets__color" style="background:{{ value.value | downcase | split: ' ' | last }};"></span>
+                {%- endif -%}
+                <span>{{ value.label }} <span class="text-muted">({{ value.count }})</span></span>
+              </label>
+            {%- endfor -%}
+          </div>
+      {%- endcase -%}
+    </details>
+  {%- endfor -%}
+
+  <noscript><button type="submit" class="button button--accent button--full" style="margin-top:1.2rem;">{{ 'collections.filters.apply' | t }}</button></noscript>
+</form>

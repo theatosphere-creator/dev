@@ -1,0 +1,76 @@
+{% render 'breadcrumbs' %}
+<div class="page-width section">
+  <article class="article">
+    <div class="text-center" style="margin-bottom:2.4rem;">
+      <div class="article-card__meta">
+        {%- if article.tags.size > 0 -%}{{ article.tags.first }} &middot; {% endif %}{{ article.published_at | date: '%B %d, %Y' }} &middot; {{ 'blogs.article.by_author' | t: author: article.author }}
+      </div>
+      <h1 style="margin-top:0.6rem;">{{ article.title }}</h1>
+    </div>
+
+    {%- if article.image -%}
+      <div class="article__hero">
+        <img src="{{ article.image | image_url: width: 1600 }}" alt="{{ article.title | escape }}" width="1600" height="800" fetchpriority="high">
+      </div>
+    {%- endif -%}
+
+    <div class="article__body rte">{{ article.content }}</div>
+
+    {%- if section.settings.show_share -%}
+      {% render 'social-sharing', share_link: article.url, share_title: article.title %}
+    {%- endif -%}
+
+    {%- comment -%} Related articles {%- endcomment -%}
+    {%- assign related_count = 0 -%}
+    {%- if blog.articles.size > 1 -%}
+      <div class="section">
+        <h2 style="margin-bottom:2rem;">{{ 'blogs.article.related_articles' | t }}</h2>
+        <div class="blog-grid">
+          {%- for related in blog.articles -%}
+            {%- if related.id != article.id and related_count < 3 -%}
+              <article class="article-card">
+                <a href="{{ related.url }}" class="article-card__image">
+                  {%- if related.image -%}<img src="{{ related.image | image_url: width: 600 }}" alt="{{ related.title | escape }}" width="400" height="250" loading="lazy">{%- else -%}{{ 'image' | placeholder_svg_tag }}{%- endif -%}
+                </a>
+                <a href="{{ related.url }}"><h3 class="article-card__title" style="font-size:1.7rem;">{{ related.title }}</h3></a>
+              </article>
+              {%- assign related_count = related_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if blog.comments_enabled? and section.settings.show_comments -%}
+      <div class="section" id="comments">
+        <h2>{{ 'blogs.comments.title' | t }}</h2>
+        {%- if article.comments_count > 0 -%}
+          {%- for comment in article.comments -%}
+            <div style="padding:1.6rem 0;border-bottom:1px solid var(--color-border);">
+              <strong>{{ comment.author }}</strong>
+              <div class="text-muted" style="font-size:1.3rem;">{{ comment.created_at | date: '%b %d, %Y' }}</div>
+              <div class="rte">{{ comment.content }}</div>
+            </div>
+          {%- endfor -%}
+        {%- endif -%}
+        {%- form 'new_comment', article -%}
+          {%- if form.posted_successfully? -%}<p>{{ 'blogs.comments.success' | t }}</p>{%- endif -%}
+          <div class="field"><label class="field__label" for="cn">{{ 'blogs.comments.name' | t }}</label><input id="cn" type="text" name="comment[author]" required></div>
+          <div class="field"><label class="field__label" for="ce">{{ 'blogs.comments.email' | t }}</label><input id="ce" type="email" name="comment[email]" required></div>
+          <div class="field"><label class="field__label" for="cb">{{ 'blogs.comments.message' | t }}</label><textarea id="cb" name="comment[body]" required></textarea></div>
+          <button type="submit" class="button button--accent">{{ 'blogs.comments.post' | t }}</button>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </article>
+</div>
+
+{% schema %}
+{
+  "name": "Article",
+  "settings": [
+    { "type": "checkbox", "id": "show_share", "label": "Show social sharing", "default": true },
+    { "type": "checkbox", "id": "show_comments", "label": "Show comments", "default": true }
+  ]
+}
+{% endschema %}

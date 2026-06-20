@@ -1,0 +1,85 @@
+{%- comment -%} Open Graph, Twitter Card and JSON-LD schema markup {%- endcomment -%}
+
+{%- liquid
+  if settings.social_share_image
+    assign og_image = settings.social_share_image
+  endif
+-%}
+
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ page_title | default: shop.name }}">
+<meta property="og:type" content="{% if request.page_type == 'product' %}product{% elsif request.page_type == 'article' %}article{% else %}website{% endif %}">
+<meta property="og:description" content="{{ page_description | default: shop.description | default: shop.name | escape }}">
+
+{%- if request.page_type == 'product' and product -%}
+  {%- if product.featured_media -%}
+    <meta property="og:image" content="https:{{ product.featured_media | image_url: width: 1200 }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="1200">
+  {%- endif -%}
+  <meta property="product:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+  <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+{%- elsif request.page_type == 'article' and article -%}
+  {%- if article.image -%}
+    <meta property="og:image" content="https:{{ article.image | image_url: width: 1200 }}">
+  {%- endif -%}
+{%- elsif og_image -%}
+  <meta property="og:image" content="https:{{ og_image | image_url: width: 1200 }}">
+{%- endif -%}
+
+<meta name="twitter:card" content="summary_large_image">
+{%- if settings.twitter_handle != blank -%}
+  <meta name="twitter:site" content="{{ settings.twitter_handle }}">
+{%- endif -%}
+<meta name="twitter:title" content="{{ page_title | default: shop.name }}">
+<meta name="twitter:description" content="{{ page_description | default: shop.description | default: shop.name | escape }}">
+
+{%- comment -%} JSON-LD: Organization + WebSite {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": {{ shop.name | json }},
+  "url": {{ shop.url | append: '/' | json }}
+  {%- if settings.social_share_image %},
+  "logo": "https:{{ settings.social_share_image | image_url: width: 600 }}"
+  {%- endif -%}
+}
+</script>
+
+{%- if request.page_type == 'index' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ shop.name | json }},
+  "url": {{ shop.url | append: '/' | json }},
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {{ shop.url | append: '/search?q={search_term_string}' | json }},
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{%- endif -%}
+
+{%- if request.page_type == 'product' and product -%}
+  {%- render 'schema-product', product: product -%}
+{%- endif -%}
+
+{%- if request.page_type == 'article' and article -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": {{ article.title | json }},
+  "articleBody": {{ article.content | strip_html | json }},
+  "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+  "author": { "@type": "Person", "name": {{ article.author | json }} }
+  {%- if article.image %},
+  "image": ["https:{{ article.image | image_url: width: 1200 }}"]
+  {%- endif -%}
+}
+</script>
+{%- endif -%}

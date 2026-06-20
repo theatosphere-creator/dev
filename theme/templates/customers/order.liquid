@@ -1,0 +1,45 @@
+<div class="page-width section">
+  <a href="{{ routes.account_url }}" class="link" style="border:0;">&larr; {{ 'customer.account.return' | t }}</a>
+  <h1 style="margin-top:1rem;">{{ 'customer.orders.order_number' | t }} {{ order.name }}</h1>
+  <p class="text-muted">{{ order.created_at | date: '%B %d, %Y %I:%M %p' }}</p>
+
+  <div style="overflow-x:auto;margin-top:2.4rem;">
+    <table class="account-table">
+      <thead>
+        <tr><th>Product</th><th>SKU</th><th>Price</th><th>Qty</th><th>Total</th></tr>
+      </thead>
+      <tbody>
+        {%- for line_item in order.line_items -%}
+          <tr>
+            <td><a href="{{ line_item.product.url }}">{{ line_item.title }}</a></td>
+            <td>{{ line_item.sku }}</td>
+            <td>{{ line_item.price | money }}</td>
+            <td>{{ line_item.quantity }}</td>
+            <td>{{ line_item.final_line_price | money }}</td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+      <tfoot>
+        <tr><td colspan="4" style="text-align:right;">{{ 'cart.general.subtotal' | t }}</td><td>{{ order.line_items_subtotal_price | money }}</td></tr>
+        {%- for shipping_method in order.shipping_methods -%}
+          <tr><td colspan="4" style="text-align:right;">Shipping ({{ shipping_method.title }})</td><td>{{ shipping_method.price | money }}</td></tr>
+        {%- endfor -%}
+        {%- for tax_line in order.tax_lines -%}
+          <tr><td colspan="4" style="text-align:right;">Tax ({{ tax_line.title }})</td><td>{{ tax_line.price | money }}</td></tr>
+        {%- endfor -%}
+        <tr style="font-weight:700;"><td colspan="4" style="text-align:right;">{{ 'customer.orders.total' | t }}</td><td>{{ order.total_net_amount | money }}</td></tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="account-layout" style="margin-top:3.2rem;">
+    <div>
+      <h3>Billing address</h3>
+      <p class="text-muted">{{ order.billing_address | format_address }}</p>
+    </div>
+    <div>
+      <h3>Shipping address</h3>
+      <p class="text-muted">{{ order.shipping_address | format_address }}</p>
+    </div>
+  </div>
+</div>

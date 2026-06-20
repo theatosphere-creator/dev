@@ -1,0 +1,50 @@
+<div class="section{% if section.settings.full_width %}{% else %} page-width{% endif %}">
+  <div style="{% if section.settings.bg %}background:{{ section.settings.bg }};color:{{ section.settings.text_color }};{% endif %}{% unless section.settings.full_width %}border-radius:var(--card-radius);{% endunless %}padding:5rem 2.4rem;">
+    <div class="page-width">
+      {%- if section.settings.heading != blank -%}
+        <div class="section-header section-header--center scroll-trigger"><h2 class="section-header__title">{{ section.settings.heading }}</h2></div>
+      {%- endif -%}
+      <div class="stats-grid scroll-trigger">
+        {%- for block in section.blocks -%}
+          <div class="stat" {{ block.shopify_attributes }}>
+            <div class="stat__number">{{ block.settings.number }}</div>
+            <div class="stat__label">{{ block.settings.label }}</div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Stats / Achievements",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Trusted worldwide" },
+    { "type": "checkbox", "id": "full_width", "label": "Full width", "default": false },
+    { "type": "color", "id": "bg", "label": "Background", "default": "#111111" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#FFFFFF" }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "number", "label": "Number", "default": "1M+" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Products sold" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stats / Achievements",
+      "blocks": [
+        { "type": "stat", "settings": { "number": "1M+", "label": "Products sold" } },
+        { "type": "stat", "settings": { "number": "40+", "label": "Countries" } },
+        { "type": "stat", "settings": { "number": "4.8\u2605", "label": "Average rating" } },
+        { "type": "stat", "settings": { "number": "25", "label": "Design awards" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
